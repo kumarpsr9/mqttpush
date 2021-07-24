@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+
+    if (!('Notification' in window)) {
+      console.log('This browser does not support notifications!');
+
+    }
+
+    Notification.requestPermission(status => {
+      console.log('Notification permission status:', status);
+    });
+
+
+    payload = {
+      "title": "Welcome to Aditya",
+      "description": "Sample Description for mqttpush notification click here for know more",
+      "icon": 'https://pbs.twimg.com/profile_images/1328650756044382208/9MNnUur0_400x400.jpg',
+      "redirectUrl": "http://aditya.ac.in"
+    }
+
+
+    displayNotification(payload);
+
+
+
+
+
+
+    function displayNotification(pl) {
+
+      // TODO 2.3 - display a Notification
+
+      if (Notification.permission == 'granted') {
+        navigator.serviceWorker.getRegistration().then(reg => {
+
+          // TODO 2.4 - Add 'options' object to configure the notification
+          const options = {
+            body: pl.description,
+            icon: pl.icon,
+            vibrate: [100, 50, 100],
+            data: {
+              dateOfArrival: Date.now(),
+              primaryKey: 1,
+              redirectUrl:pl.redirectUrl
+            },
+            actions: [{
+                action: 'explore',
+                title: 'Go to the site',
+                icon: pl.icon
+              },
+              {
+                action: 'close',
+                title: 'Close the notification',
+                icon: pl.icon
+              },
+            ]
+          };
+
+
+
+          reg.showNotification(pl.title, options);
+        });
+      }
+
+    }
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
